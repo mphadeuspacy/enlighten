@@ -1,4 +1,6 @@
 #pragma once
+#ifndef INCLUDED_MORNING_MACROS_H
+#define INCLUDED_MORNING_MACROS_H
 
 namespace enlighten {
 
@@ -16,19 +18,17 @@ namespace enlighten {
 
 #define OK ok   
 
-#define IT_SHOULD_THROW consumer.ItShouldThrow()
-
 #define STEP(stepId, classType, methodName) \
    struct methodName##Step {  \
       typedef classType Type; \
       methodName##Step()  \
       {  \
       StepDefinition *functionBase= new StepDefinition(#methodName, &classType::methodName, this); \
-			StepMap::AddStep(stepId, functionBase);   \
+			StepMap().GetInstance().AddStep(stepId, functionBase);   \
       }  \
       ~methodName##Step()  \
       {  \
-         StepMap::RemoveStep(stepId);   \
+         StepMap().GetInstance().RemoveStep(stepId);   \
       }  \
    } methodName##Step;
 
@@ -39,11 +39,11 @@ namespace enlighten {
       methodName##Step()  \
       {  \
       StepDefinition *functionBase= new StepDefinition(#methodName, &classType::methodName, this, 1); \
-         StepMap::AddStep(stepId, functionBase);   \
+         StepMap().GetInstance().AddStep(stepId, functionBase);   \
       }  \
 		~methodName##Step()  \
       {  \
-         StepMap::RemoveStep(stepId);   \
+         StepMap().GetInstance().RemoveStep(stepId);   \
       }  \
    } methodName##Step;
 
@@ -55,11 +55,11 @@ namespace enlighten {
       methodName##Step()  \
       {  \
       StepDefinition *functionBase= new StepDefinition(#methodName, &classType::methodName, this, 1, 2); \
-         StepMap::AddStep(stepId, functionBase);   \
+         StepMap().GetInstance().AddStep(stepId, functionBase);   \
       }  \
       ~methodName##Step()  \
       {  \
-         StepMap::RemoveStep(stepId);   \
+         StepMap().GetInstance().RemoveStep(stepId);   \
       }  \
    } methodName##Step;
 
@@ -72,12 +72,14 @@ namespace enlighten {
       methodName##Step()  \
       {  \
       StepDefinition *functionBase= new StepDefinition(#methodName, &classType::methodName, this, 1, 2, 3); \
-         StepMap::AddStep(stepId, functionBase);   \
+         StepMap().GetInstance().AddStep(stepId, functionBase);   \
       }  \
       ~methodName##Step()  \
       {  \
-         StepMap::RemoveStep(stepId);   \
+         StepMap().GetInstance().RemoveStep(stepId);   \
       }  \
    } methodName##Step;
 
 } //namespace enlighten
+
+#endif //INCLUDED_MORNING_MACROS_H

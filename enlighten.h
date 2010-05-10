@@ -32,12 +32,12 @@
 #include <assert.h>
 
 #include <consumer.h>
-#include <macros.h>
+#include <morning_macros.h>
 
 namespace enlighten {   
    
    extern Consumer consumer;
-   extern Consumer::EndMarker ok;   
+   extern Consumer::EndMarker ok;
 
 } //namespace enlighten
 

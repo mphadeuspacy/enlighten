@@ -1,27 +1,19 @@
 #include "step_map.h"
 
 #include <consumer.h>
+#include <enlighten_macros.h>
 
-#include <macros.h>
-
-namespace enlighten {
-
-	std::map<std::string, StepDefinition*> StepMap::stepMap;
+namespace enlighten {	
 
 	Consumer consumer;
 	Consumer::EndMarker ok;   
 
    struct BuiltInSteps {      
 
-      //STEP("it should throw", BuiltInSteps, itShouldThrow)
-      static void ItShouldThrow()
+      STEP("it should throw", BuiltInSteps, ItShouldThrow)
+      void ItShouldThrow()
       {
-         if (!consumer.HasThrow()) {
-            //consumer.HasThrow(false);
-            std::runtime_error e("The step should throw a exception but never did");
-            throw e;
-         }         
-         consumer.HasThrow(false);
+         consumer.NextStepShouldThrow();
       }
    } builtinSteps;
 
