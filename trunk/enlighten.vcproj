@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="enlighten"
+	Name="morning"
 	ProjectGUID="{AECEC089-E757-48B2-A2FB-0E53F75B2FEB}"
 	RootNamespace="endocrine"
 	TargetFrameworkVersion="196613"
@@ -19,7 +19,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="4"
+			ConfigurationType="1"
 			CharacterSet="2"
 			>
 			<Tool
@@ -58,10 +58,16 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="cppunitd_dll.lib"
+				AdditionalLibraryDirectories="$(CPPUNIT_HOME)/lib"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -71,6 +77,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -186,7 +195,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\macros.h"
+				RelativePath=".\enlighten_macros.h"
 				>
 			</File>
 			<File

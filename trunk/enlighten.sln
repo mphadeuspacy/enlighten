@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "enlighten", "enlighten.vcproj", "{DD092C98-0595-467C-BF07-01D26661B868}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "morning", "enlighten.vcproj", "{AECEC089-E757-48B2-A2FB-0E53F75B2FEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +9,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DD092C98-0595-467C-BF07-01D26661B868}.Debug|Win32.ActiveCfg = Debug|Win32
-		{DD092C98-0595-467C-BF07-01D26661B868}.Debug|Win32.Build.0 = Debug|Win32
-		{DD092C98-0595-467C-BF07-01D26661B868}.Release|Win32.ActiveCfg = Release|Win32
-		{DD092C98-0595-467C-BF07-01D26661B868}.Release|Win32.Build.0 = Release|Win32
+		{AECEC089-E757-48B2-A2FB-0E53F75B2FEB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AECEC089-E757-48B2-A2FB-0E53F75B2FEB}.Debug|Win32.Build.0 = Debug|Win32
+		{AECEC089-E757-48B2-A2FB-0E53F75B2FEB}.Release|Win32.ActiveCfg = Release|Win32
+		{AECEC089-E757-48B2-A2FB-0E53F75B2FEB}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

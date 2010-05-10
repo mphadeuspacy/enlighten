@@ -37,20 +37,11 @@ namespace enlighten {
       void *actualInstance;
 		std::string className;
 
-      
-      struct ExceptionInfo {
-      
-         ExceptionInfo() : exceptionThrown(false) {}
+      bool nextStepShouldThrow;
 
-         std::string methodThrown;
-         bool exceptionThrown;
-
-      } exceptionInfo;
-
-      StepDefinition *lastStepExecuted;     
 
    public:
-      Consumer() : lastStepExecuted(NULL) {}
+      Consumer() : nextStepShouldThrow(false) {}
 
       struct EndMarker {};
 
@@ -63,6 +54,12 @@ namespace enlighten {
       Consumer &operator<<(int value) 
       {
          parameters.push_back(new Parameter<int>(value,"int"));
+         return *this;
+      }
+
+      Consumer &operator<<(bool value) 
+      {
+         parameters.push_back(new Parameter<bool>(value,"bool"));
          return *this;
       }
 
@@ -85,15 +82,19 @@ namespace enlighten {
          return *this;
       }
 
+      void formatTypeName(std::string &name)
+      {         
+         if (!name.find("class"))
+            name.erase(0, 5);
+         if (!name.find("struct"))
+            name.erase(0, 6);
+      }
+
 		template <typename T>
 		std::string getTypeName(const T &t)
-		{
+		{         
 			std::string name(typeid(t).name());
-			if (!name.find("class"))
-				name.erase(0, 5);
-			if (!name.find("struct"))
-				name.erase(0, 6);
-
+         formatTypeName(name);
 			return name;
 		}
 
@@ -106,50 +107,26 @@ namespace enlighten {
 
       void Consume()
       {
-         if (lastStepExecuted && lastStepExecuted->HasThrown() && methodName.compare("it should throw")) {
-            std::stringstream ss;
-            ss << "\n\n\nENLIGHTEN LOG: \nAn exception was thrown during the step \"" 
-               << lastStepExecuted->GetStepName() << "\" execution\n"
-               << "If it is a specification you can use the built in step \"it should throw\" "
-               << "\n\nExample: THEN << \"it should throw\" << OK; \n\n";
 
-            lastStepExecuted->HasThrown(false);
-            std::cerr << ss.str();
+			if (StepMap().GetInstance().ExistStepDefinition(methodName)) {
+				StepDefinition *step= StepMap().GetInstance().GetStepDefinition(methodName);
+            if (step->GetStepImpl()->MatchParameters(parameters)) {               
 
-            std::runtime_error e("");
-            throw e;
-         }
+               if (this->nextStepShouldThrow) 
+                  executeProtected(step);
+               else 
+                  executeUnprotected(step);
 
-			if (StepMap::ExistStepDefinition(methodName)) {
-				StepDefinition *step= StepMap::GetStepDefinition(methodName);
-            if (step->GetStepImpl()->MatchParameters(parameters)) {
-
-               lastStepExecuted= step;
-
-               try {
-                  /*exceptionInfo.exceptionThrown= false;*/
-                  lastStepExecuted->HasThrown(false);
-
-                  step->GetStepImpl()->Execute(actualInstance, parameters);
-                  return;
-
-               } catch (...) 
-               {
-                  lastStepExecuted->HasThrown(true);
-
-                  /*exceptionInfo.methodThrown= methodName;
-                  exceptionInfo.exceptionThrown= true;*/
-                  return;
-               }
+               return;
             }
          }
          std::stringstream ss;
          ss << "\nyou must define the step: \n\n";
          ss << methodName << "\n\n";
          ss << "you can implement the step definition with this snippet:\n\n";
-         ss << "STEP"
-				<< parameters.size()
-				<< "(\"" << methodName << "\","
+         ss << "STEP";
+         if (parameters.size()) ss << parameters.size();
+			ss	<< "(\"" << methodName << "\","
 				<< getClassName()
 				<< ", " 
 				<< wikifyMethodName()
@@ -160,11 +137,35 @@ namespace enlighten {
             << printParameters(true, false) 
             << ") \n{ \n   pending \n} \n";   
 
-			std::cerr << ss.str();
+			//std::cerr << ss.str();
 			//assert(false);
 
-         std::runtime_error e("");
+         std::runtime_error e(ss.str());
          throw e;
+      }
+
+      void executeUnprotected( StepDefinition * step ) 
+      {
+         step->GetStepImpl()->Execute(actualInstance, parameters);
+      }
+
+      void executeProtected( StepDefinition * step ) 
+      {
+         try {
+
+            step->GetStepImpl()->Execute(actualInstance, parameters);
+
+            std::stringstream ss;
+            ss << "\n\n\nENLIGHTEN LOG: \nAn exception should thrown during the step \"" 
+               << step->GetStepName() << "\" execution but it didnt\n";                        
+            std::runtime_error e(ss.str());
+            throw e;
+
+
+         } catch(...)
+         {  
+            this->nextStepShouldThrow= false;
+         }                 
       }
 
 		void SetThisPointer(void *instance, const std::string &_className)
@@ -173,11 +174,7 @@ namespace enlighten {
          methodName= "";
          actualInstance= instance;			
 			className= _className;
-//#ifdef MSVC
-			//clear the class from the typeid().name()
-			//TODO: verify if its standard
-			className.erase(0, 5);
-//#endif 
+         formatTypeName(className);
       }
 
 		std::string getClassName()
@@ -217,27 +214,12 @@ namespace enlighten {
 		std::string wikifyMethodName()
 		{
 			return wikifyMethodName(methodName, false);			
-		}
+		}      
 
-      bool HasThrow() const
+      void NextStepShouldThrow()
       {
-         return lastStepExecuted->HasThrown();
+         this->nextStepShouldThrow= true;
       }
-
-      void HasThrow(bool hasThrown) 
-      {
-         return lastStepExecuted->HasThrown(hasThrown);
-      }
-
-      void ItShouldThrow()
-      {
-         if (!HasThrow()) {
-            //consumer.HasThrow(false);
-            std::runtime_error e("The step should throw a exception but never did");
-            throw e;
-         }         
-         HasThrow(false);
-      } 
    };   
 
 } //namespace enlighten

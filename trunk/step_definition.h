@@ -29,7 +29,8 @@ namespace enlighten {
 
 		void operator()(void *instance)
 		{
-			ClassType *inst= reinterpret_cast<ClassType*>(instance);
+			//ClassType *inst= reinterpret_cast<ClassType*>(instance);
+         ClassType *inst= static_cast<ClassType*>(instance);
 			CALL_MEMBER_FUNCTION(*inst, f)();
 		}   
 
@@ -55,7 +56,8 @@ namespace enlighten {
 
 		void operator()(void *instance, Param1 p1)
 		{
-			ClassType *inst= reinterpret_cast<ClassType*>(instance);
+			//ClassType *inst= reinterpret_cast<ClassType*>(instance);
+         ClassType *inst= static_cast<ClassType*>(instance);
 			CALL_MEMBER_FUNCTION(*inst, f)(p1);
 		}   
 
@@ -90,7 +92,8 @@ namespace enlighten {
 
       void operator()(void *instance, Param1 p1, Param2 p2)
       {
-         ClassType *inst= reinterpret_cast<ClassType*>(instance);
+         //ClassType *inst= reinterpret_cast<ClassType*>(instance);
+         ClassType *inst= static_cast<ClassType*>(instance);
          CALL_MEMBER_FUNCTION(*inst, f)(p1, p2);
       }   
 
@@ -127,7 +130,8 @@ namespace enlighten {
 
       void operator()(void *instance, Param1 p1, Param2 p2, Param3 p3)
       {
-         ClassType *inst= reinterpret_cast<ClassType*>(instance);
+         //ClassType *inst= reinterpret_cast<ClassType*>(instance);
+         ClassType *inst= static_cast<ClassType*>(instance);
          CALL_MEMBER_FUNCTION(*inst, f)(p1, p2, p3);
       }   
 
