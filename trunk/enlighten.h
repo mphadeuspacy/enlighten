@@ -32,7 +32,7 @@
 #include <assert.h>
 
 #include <consumer.h>
-#include <morning_macros.h>
+#include <enlighten_macros.h>
 
 namespace enlighten {   
    
