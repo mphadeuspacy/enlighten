@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="morning"
-	ProjectGUID="{AECEC089-E757-48B2-A2FB-0E53F75B2FEB}"
-	RootNamespace="endocrine"
+	Name="unit-fitnesse"
+	ProjectGUID="{E9A1C446-17C9-45E1-AB6E-CBD982A61C33}"
+	RootNamespace="unitfitnesse"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -40,8 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(CPPUNIT_HOME)/include&quot;;&quot;c:\gmock-1.4.0\gmock-1.4.0\gtest\include&quot;;."
-				PreprocessorDefinitions="USING_CPPUNIT"
+				AdditionalIncludeDirectories="&quot;C:\Users\Martim\Desktop\unit-fitnesse\unit-fitnesse\igloo&quot;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -59,9 +58,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cppunitd_dll.lib"
-				AdditionalLibraryDirectories="$(CPPUNIT_HOME)/lib"
 				GenerateDebugInformation="true"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -165,19 +163,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\EnlightenGTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\EnlightenTest.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\step_map.cpp"
+				RelativePath=".\SimpleTest.cpp"
 				>
 			</File>
 		</Filter>
@@ -187,27 +177,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\consumer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\enlighten.h"
-				>
-			</File>
-			<File
-				RelativePath=".\enlighten_macros.h"
-				>
-			</File>
-			<File
-				RelativePath=".\parameter.h"
-				>
-			</File>
-			<File
-				RelativePath=".\step_definition.h"
-				>
-			</File>
-			<File
-				RelativePath=".\step_map.h"
+				RelativePath=".\FluentInterfaceHelper.h"
 				>
 			</File>
 		</Filter>
