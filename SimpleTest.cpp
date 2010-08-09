@@ -1,54 +1,11 @@
 #include <igloo/igloo.h>
 using namespace igloo;
 
-//teste
-
+#include "Fixture.h"
+#include "TableParser.h"
 #include "FluentInterfaceHelper.h"
 
-typedef std::vector<std::string> Rows;
-
-class ExampleFixture
-{
-public:
-   void ParaOsDados(const std::string &file)
-   {
-      //parse
-      
-      execute();
-   }
-
-   virtual void execute()= 0;
-
-   template <class T>
-   T getCellAs(const std::string label, int row)
-   {
-      T valueAsInt;
-      std::stringstream ss(columns[label][row].c_str());
-      ss >> valueAsInt;
-      return valueAsInt;      
-   }
-
-   int ExampleCount() const
-   {
-      return exampleCount;
-   }
-
-protected:
-   int exampleCount;
-   std::map<std::string, Rows> columns;
-};
-
-#define DECLARE_COLUMN(name, klass)  \
-   klass &name(const std::string &_##name)   \
-   {  \
-      columns[_##name]= Rows();  \
-      return *this;  \
-   }  
-
-
-
-
-class CalculeIMC : public ExampleFixture
+class CalculeIMC : public Fixture
 {
 public:
    DECLARE_SUGAR(ParaPessoa, CalculeIMC);
@@ -65,13 +22,11 @@ public:
          double altura= this->getCellAs<double>("altura", i);
          double peso= this->getCellAs<double>("peso", i);
 
-      }
-
-      
+      }      
    }
 };
 
-struct SimpleFixture : public ExampleFixture
+struct SimpleFixture : public Fixture
 {
    DECLARE_COLUMN(SomeColumn, SimpleFixture);
 
@@ -83,6 +38,15 @@ struct SimpleFixture : public ExampleFixture
 
 Context(SimpleExamples)
 {
+
+	Spec(Tokenizer)
+	{
+		TableParser parser;
+		Fixture::Table table= parser.LoadTable("|some|\n|50|");
+
+		Assert::That(table.size(), Is().EqualTo(1));
+
+	}
 
    Spec(ShouldReadExampleFile)
    {
