@@ -10,9 +10,7 @@ class Fixture
 {
 public:
    void ParaOsDados(const std::string &file)
-   {
-      //parse
-      
+   {      
       execute();
    }
 
@@ -22,7 +20,7 @@ public:
    T getCellAs(const std::string label, int row)
    {
       T valueAsInt;
-      std::stringstream ss(columns[label][row].c_str());
+      std::stringstream ss(rows[row][label].c_str());
       ss >> valueAsInt;
       return valueAsInt;      
    }
@@ -33,12 +31,12 @@ public:
    }
 
 public:
-	typedef std::vector<std::string> Rows;
-	typedef std::map<std::string, Rows> Table;
+	typedef std::map<std::string,std::string> Row;
+	typedef std::vector<Row> Table;
 
 protected:
    int exampleCount;
-   std::map<std::string, Rows> columns;
+   Table rows;
 };
 
 #endif //INCLUDED_FIXTURE_H
