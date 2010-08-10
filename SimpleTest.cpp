@@ -43,7 +43,14 @@ Context(SimpleExamples)
 		TableParser parser;		
 		Fixture::Table table= parser.LoadTable("|altura|peso|imc|\n|1.74|73|24.11|\n|1.63|62|23.33|\n|1.52|51|22.07|");
 		Assert::That(table.size(), Is().EqualTo(3));	
+      Assert::That(numberOfFields(table), Is().EqualTo(3));	
 	}
+
+   size_t numberOfFields(const Fixture::Table &table) const
+   {
+      if (table.empty()) return 0;
+      else return table.begin()->size();
+   }
 
 	Spec(ParserFromFile)
 	{
