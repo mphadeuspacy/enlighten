@@ -48,7 +48,7 @@ Context(SimpleExamples)
 	Spec(ParserFromFile)
 	{
 		TableParser parser;
-		Fixture::Table table= parser.LoadTableFromFile("D:\\User\\UnitFitnes\\teste.txt");
+		Fixture::Table table= parser.LoadTableFromFile("teste.txt");
 		Assert::That(table.size(), Is().EqualTo(3));	
 	}
 

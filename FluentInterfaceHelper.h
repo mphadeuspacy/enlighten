@@ -44,11 +44,19 @@
 #define DECLARE_SUGAR(name, classType) \
    classType &name() { return *this; }
 
+//#define DECLARE_COLUMN(name, klass)  \
+//   klass &name(const std::string &_##name)   \
+//   {  \
+//      columns[_##name]= Rows();  \
+//      return *this;  \
+//   }  
+
+
 #define DECLARE_COLUMN(name, klass)  \
    klass &name(const std::string &_##name)   \
    {  \
-      columns[_##name]= Rows();  \
-      return *this;  \
+   fields.push_back(_##name);  \
+   return *this;  \
    }  
 
 

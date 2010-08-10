@@ -21,15 +21,14 @@ Fixture::Table TableParser::LoadTable(const std::string &contents)
 	Fixture::Table table;
 	std::stringstream stream(contents.c_str());	
 
-	std::string cabecalho= getLine(stream);
-	std::vector<std::string> paramNames;
-	separaParametros(cabecalho,paramNames);
+	std::string header= getLine(stream);
+	std::vector<std::string> fields= tokenize(header, '|');	
 
-	while (!stream.eof()){
-		std::string linha= getLine(stream);
-		std::vector<std::string> lineParams;
-		separaParametros(linha,lineParams);
-		addParametersInTable(table,paramNames,lineParams); 
+	while (!stream.eof())
+   {
+		std::string line= getLine(stream);
+		std::vector<std::string> lineParams= tokenize(line, '|');		
+		addParametersInTable(table, fields, lineParams); 
 	}	   
 	return table;    
 }
@@ -41,28 +40,31 @@ std::string TableParser::getLine(std::stringstream &stream){
 	return std::string (line);
 }
 
-void TableParser::separaParametros( std::string linhaComTokens, std::vector<std::string> &parameters ) 
+std::vector<std::string> TableParser::tokenize(std::string content, char separator)
 {
-	parameters.clear();
-	std::string parameter;		
-	for (unsigned int i= 1; i<= linhaComTokens.size(); i++){
-		char caracter= linhaComTokens[i];
-		if (caracter == '|' && parameter.size()>0){
-			parameters.push_back(parameter);  
-			parameter.clear();
-		}
-		else
-			parameter+= caracter;
-	}
+   std::string token;
+   std::stringstream ss(content);
+   std::vector<std::string> tokens;
+
+   while (std::getline(ss, token, separator))
+   {
+      tokens.push_back(token);
+   }
+
+   return tokens;
 }
-#include <iostream>
-void TableParser::addParametersInTable( Fixture::Table &table,const std::vector<std::string> &paramNames,const std::vector<std::string> &lineParams ) 
+
+void TableParser::addParametersInTable
+( 
+   Fixture::Table &table
+   , const std::vector<std::string> &paramNames
+   , const std::vector<std::string> &lineParams 
+) 
 {
 	assert(paramNames.size()== lineParams.size());
 	Fixture::Row row;
 	for (unsigned int i= 0; i< paramNames.size(); i++){
-		row[paramNames[i]]= lineParams[i];
-		std::cout << paramNames[i] << " == " << lineParams[i] << std::endl; 
+		row[paramNames[i]]= lineParams[i];		
 	}
 	table.push_back(row);
 }
@@ -72,7 +74,7 @@ Fixture::Table TableParser::LoadTableFromFile( const std::string &fileName )
 	std::string buffer;
 	std::ifstream arq;		
 	arq.open(fileName.c_str(), std::ios::in);
-	std::getline(arq,buffer,'\0');
+	std::getline(arq, buffer, '\0');
 	arq.close();
-	return LoadTable(buffer);	
+	return LoadTable(buffer);
 }
