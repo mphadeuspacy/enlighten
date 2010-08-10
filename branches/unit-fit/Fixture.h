@@ -17,12 +17,12 @@ public:
    virtual void execute()= 0;
 
    template <class T>
-   T getCellAs(const std::string label, int row)
+   T getCellAs(const std::string field, int row)
    {
       T valueAsInt;
-      std::stringstream ss(rows[row][label].c_str());
+      std::stringstream ss(table[row][field].c_str());
       ss >> valueAsInt;
-      return valueAsInt;      
+      return valueAsInt;
    }
 
    int ExampleCount() const
@@ -31,12 +31,17 @@ public:
    }
 
 public:
-	typedef std::map<std::string,std::string> Row;
-	typedef std::vector<Row> Table;
+	//typedef std::vector<std::string> Rows;
+	//typedef std::map<std::string, Rows> Table;
+   typedef std::map<std::string, std::string> Row;
+   typedef std::vector<Row> Table;
 
 protected:
    int exampleCount;
-   Table rows;
+   //std::map<std::string, Rows> columns;
+
+   std::vector<std::string> fields;
+   Table table;
 };
 
 #endif //INCLUDED_FIXTURE_H
