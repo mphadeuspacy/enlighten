@@ -44,7 +44,6 @@ struct SimpleFixture : public Fixture
 
 Context(SimpleExamples)
 {
-
 	Spec(Tokenizer)
 	{
 		TableParser parser;		
