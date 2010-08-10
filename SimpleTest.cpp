@@ -22,7 +22,7 @@ public:
          double altura= this->getCellAs<double>("altura", i);
          double peso= this->getCellAs<double>("peso", i);
 			double imcEsperado= this->getCellAs<double>("imc", i);
-			Assert::That(IMC(altura,peso),Is().EqualTo(imcEsperado));     
+			Assert::That(IMC(altura,peso)-imcEsperado,IsLessThan(0.01));     
       }      
    }
 
@@ -34,8 +34,6 @@ public:
 
 struct SimpleFixture : public Fixture
 {
-   DECLARE_COLUMN(SomeColumn, SimpleFixture);
-
    void execute()
    {
    
@@ -79,6 +77,6 @@ Context(SimpleExamples)
          .E()
          .Altura("altura")
          .EsperaSe("imc")      
-         .LoadingData("|altura|peso|imc|\n|1.74|73|24.1115|\n|1.63|62|23.33|\n|1.52|51|22.07|");
+         .LoadingDataFromFile("teste.txt");
    }
 };
