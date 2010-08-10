@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "TableParser.h"
 #include "FixtureGlossary.h"
 
 
@@ -11,10 +12,17 @@ class Fixture
 {
 public:	
 	
-	void ParaOsDados()
-   {  		
+	void LoadingData(const std::string &data)
+   {  		 
+		table= TableParser().LoadTable(data);
 		execute();
    }
+
+	void LoadingDataFronFile(const std::string &fileName)
+	{  		 
+		table= TableParser().LoadTableFromFile(fileName);
+	   execute();
+	}
 
    virtual void execute()= 0;
 
@@ -31,8 +39,6 @@ public:
    {
       return table.size();
    }
-
-	Table &GetTable() { return table; }
 
 protected:
    Table table;	

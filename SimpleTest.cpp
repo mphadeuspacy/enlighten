@@ -21,10 +21,15 @@ public:
       {
          double altura= this->getCellAs<double>("altura", i);
          double peso= this->getCellAs<double>("peso", i);
-			double imc= altura / (peso*peso);
-         
+			double imcEsperado= this->getCellAs<double>("imc", i);
+			Assert::That(IMC(altura,peso),Is().EqualTo(imcEsperado));     
       }      
    }
+
+	double IMC(double altura, double peso)
+	{
+		return peso / (altura*altura);
+	}
 };
 
 struct SimpleFixture : public Fixture
@@ -63,7 +68,7 @@ Context(SimpleExamples)
    Spec(ShouldReadExampleFile)
    {
       SimpleFixture fixture;
-		//fixture.GetTable()= TableParser().LoadTable("|some|\n|50|");	
+		fixture.LoadingData("|some|\n|50|");	
       Assert::That(fixture.ExampleCount(), Is().EqualTo(1));            
    }
 
@@ -75,6 +80,6 @@ Context(SimpleExamples)
          .E()
          .Altura("altura")
          .EsperaSe("imc")      
-         .ParaOsDados();
+         .LoadingData("|altura|peso|imc|\n|1.74|73|24.1115|\n|1.63|62|23.33|\n|1.52|51|22.07|");
    }
 };
