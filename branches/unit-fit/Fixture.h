@@ -4,14 +4,16 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "FixtureGlossary.h"
 
 
 class Fixture
 {
-public:
-   void ParaOsDados(const std::string &file)
-   {      
-      execute();
+public:	
+	
+	void ParaOsDados()
+   {  		
+		execute();
    }
 
    virtual void execute()= 0;
@@ -27,21 +29,14 @@ public:
 
    int ExampleCount() const
    {
-      return exampleCount;
+      return table.size();
    }
 
-public:
-	//typedef std::vector<std::string> Rows;
-	//typedef std::map<std::string, Rows> Table;
-   typedef std::map<std::string, std::string> Row;
-   typedef std::vector<Row> Table;
+	Table &GetTable() { return table; }
 
 protected:
-   int exampleCount;
-   //std::map<std::string, Rows> columns;
-
-   std::vector<std::string> fields;
-   Table table;
+   Table table;	
+   std::vector<std::string> fields;  	
 };
 
 #endif //INCLUDED_FIXTURE_H

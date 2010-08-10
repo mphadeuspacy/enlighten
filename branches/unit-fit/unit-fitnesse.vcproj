@@ -185,6 +185,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FixtureGlossary.h"
+				>
+			</File>
+			<File
 				RelativePath=".\FluentInterfaceHelper.h"
 				>
 			</File>
