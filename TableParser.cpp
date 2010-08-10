@@ -48,7 +48,8 @@ std::vector<std::string> TableParser::tokenize(std::string content, char separat
 
    while (std::getline(ss, token, separator))
    {
-      tokens.push_back(token);
+      if (!token.empty())
+         tokens.push_back(token);
    }
 
    return tokens;
