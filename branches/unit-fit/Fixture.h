@@ -18,7 +18,7 @@ public:
 		execute();
    }
 
-	void LoadingDataFronFile(const std::string &fileName)
+	void LoadingDataFromFile(const std::string &fileName)
 	{  		 
 		table= TableParser().LoadTableFromFile(fileName);
 	   execute();
