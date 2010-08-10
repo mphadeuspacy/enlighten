@@ -33,7 +33,8 @@ Fixture::Table TableParser::LoadTable(const std::string &contents)
 	return table;    
 }
 
-std::string TableParser::getLine(std::stringstream &stream){
+std::string TableParser::getLine(std::stringstream &stream)
+{
 	const int MAX_LINE= 256;
 	char line[MAX_LINE];
 	stream.getline(line,MAX_LINE);
