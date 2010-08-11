@@ -17,11 +17,12 @@ public:
 
    void execute()
    {   
-      for (int i= 0; i < ExampleCount(); i++)
+      Table *imcTable= GetTable("ImcTable");
+      for (unsigned i= 0; i < imcTable->GetRows().size(); i++)
       {
-         double altura= this->getCellAs<double>("altura", i);
-         double peso= this->getCellAs<double>("peso", i);
-			double imcEsperado= this->getCellAs<double>("imc", i);
+         double altura= this->getCellAs<double>("ImcTable", "altura", i);
+         double peso= this->getCellAs<double>("ImcTable", "peso", i);
+			double imcEsperado= this->getCellAs<double>("ImcTable", "imc", i);
 			Assert::That(IMC(altura,peso)-imcEsperado,IsLessThan(0.01));     
       }      
    }
@@ -45,28 +46,26 @@ Context(SimpleExamples)
 	Spec(Tokenizer)
 	{
 		TableParser parser;		
-		Table table= parser.LoadTable("|altura|peso|imc|\n|1.74|73|24.11|\n|1.63|62|23.33|\n|1.52|51|22.07|");
-		Assert::That(table.size(), Is().EqualTo(3));	
-      Assert::That(numberOfFields(table), Is().EqualTo(3));	
-	}
+		Table *table= parser.LoadTable("|ImcTable|\n|altura|peso|imc|\n|1.74|73|24.11|\n|1.63|62|23.33|\n|1.52|51|22.07|");
+		Assert::That(table->RowsCount(), Is().EqualTo(3));	
+      Assert::That(table->FieldsCount(), Is().EqualTo(3));	
 
-   size_t numberOfFields(const Table &table) const
-   {
-      if (table.empty()) return 0;
-      else return table.begin()->size();
-   }
+      delete table;
+	}   
 
 	Spec(ParserFromFile)
 	{		
-		Table table= TableParser().LoadTableFromFile("teste.txt");
-		Assert::That(table.size(), Is().EqualTo(3));	
+		Table *table= TableParser().LoadTableFromFile("teste.txt");
+		Assert::That(table->RowsCount(), Is().EqualTo(3));	
+      delete table;
 	}
 
-   Spec(ShouldReadExampleFile)
+   Spec(ShouldReadExampleFromString)
    {
       SimpleFixture fixture;
-		fixture.LoadingData("|some|\n|50|");	
-      Assert::That(fixture.ExampleCount(), Is().EqualTo(1));            
+		fixture.LoadingData("|some|\n|column|\n|50|\n\n");	
+      Table *table= fixture.GetTable("some");
+      Assert::That(table->RowsCount(), Is().EqualTo(1));
    }
 
    Spec(ShouldFailOnError)

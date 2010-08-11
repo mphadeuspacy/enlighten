@@ -170,10 +170,6 @@
 				RelativePath=".\SimpleTest.cpp"
 				>
 			</File>
-			<File
-				RelativePath=".\TableParser.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -190,6 +186,10 @@
 			</File>
 			<File
 				RelativePath=".\FluentInterfaceHelper.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Table.h"
 				>
 			</File>
 			<File

@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <string>
 #include "FixtureGlossary.h"
+#include "Table.h"
 
 class TableParser
 {
@@ -13,15 +14,24 @@ public:
 	TableParser(){}
 	virtual ~TableParser(){}
 
+   std::string trim(const std::string &strToSplit, char toStrip='|') const
+   {
+      std::string str(strToSplit);
+      str.erase(std::remove(str.begin(), str.end(), toStrip), str.end());
+      return str;
+   }
+
    /**
    *  Loads a table
    *  @return Table
    *  @param  const std::string & contents
    */
-   Table LoadTable(const std::string &contents)
-	{	
-		Table table;
-		std::stringstream stream(contents.c_str());	
+   Table *LoadTable(const std::string &contents)
+	{			
+		std::stringstream stream(contents.c_str());
+
+      std::string tableName= trim(getLine(stream));
+      Table *table= new Table(tableName);
 
 		std::string header= getLine(stream);
 		std::vector<std::string> fields= tokenize(header, '|');	
@@ -29,8 +39,9 @@ public:
 		while (!stream.eof())
 		{
 			std::string line= getLine(stream);
-			std::vector<std::string> lineParams= tokenize(line, '|');		
-			addParametersInTable(table, fields, lineParams); 
+         if (line.empty()) continue;
+			std::vector<std::string> lineParams= tokenize(line, '|');
+			addParametersInTable(*table, fields, lineParams); 
 		}	   
 		return table;    
 	}
@@ -40,15 +51,50 @@ public:
 	*  @return Table
 	*  @param  const std::string & fileName
 	*/
-	Table LoadTableFromFile(const std::string &fileName)
+	Table *LoadTableFromFile(const std::string &fileName)
 	{
 		std::string buffer;
-		std::ifstream arq;		
-		arq.open(fileName.c_str(), std::ios::in);
+		std::ifstream arq(fileName.c_str());
+      if (arq.fail())
+         throw std::runtime_error("Cant read the table file " +  fileName);
+		
 		std::getline(arq, buffer, '\0');
 		arq.close();
 		return LoadTable(buffer);
 	}
+
+
+   std::map<std::string, Table*> LoadTables(const std::string &contents)
+   {
+      std::map<std::string, Table*> tables;
+      std::stringstream ss(contents);      
+      std::string line, tableContents;
+
+      while (std::getline(ss, line, '\n'))
+      {
+         if (!line.empty()) {
+            tableContents+= line;
+            tableContents+= "\n";
+
+         } else {
+            Table *loadedTable= LoadTable(tableContents);
+            tables[loadedTable->TableName()]= loadedTable;
+         }
+      }
+      return tables;
+   }
+
+   std::map<std::string, Table*> LoadTablesFromFile(const std::string &fileName)
+   {
+      std::string buffer;
+      std::ifstream arq(fileName.c_str());
+      if (arq.fail())
+         throw std::runtime_error("Cant read the table file " +  fileName);
+
+      std::getline(arq, buffer, '\0');
+      arq.close();
+      return LoadTables(buffer);
+   }
 
 private:
    /**
@@ -102,7 +148,7 @@ private:
 		for (unsigned int i= 0; i< paramNames.size(); i++){
 			row[paramNames[i]]= lineParams[i];		
 		}
-		table.push_back(row);
+		table.GetRows().push_back(row);
 	}
 };
 
