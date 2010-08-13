@@ -15,13 +15,6 @@ public:
 	TableParser(){}
 	virtual ~TableParser(){}
 
-   std::string trim(const std::string &strToSplit, char toStrip='|') const
-   {
-      std::string str(strToSplit);
-      str.erase(std::remove(str.begin(), str.end(), toStrip), str.end());
-      return str;
-   }
-
    /** 
    *  Loads a table
    *  @return Table
@@ -30,8 +23,7 @@ public:
    Table *LoadTable(const std::string &contents)
 	{			
 		std::stringstream stream(contents.c_str());
-
-      //std::string tableName= trim(getLine(stream));
+      
       Table *table= parseTableName(getLine(stream));
 
 		std::string header= getLine(stream);
