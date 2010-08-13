@@ -7,6 +7,7 @@
 #include <string>
 #include "FixtureGlossary.h"
 #include "Table.h"
+#include <algorithm>
 
 class TableParser
 {
@@ -21,7 +22,7 @@ public:
       return str;
    }
 
-   /**
+   /** 
    *  Loads a table
    *  @return Table
    *  @param  const std::string & contents
@@ -30,8 +31,8 @@ public:
 	{			
 		std::stringstream stream(contents.c_str());
 
-      std::string tableName= trim(getLine(stream));
-      Table *table= new Table(tableName);
+      //std::string tableName= trim(getLine(stream));
+      Table *table= parseTableName(getLine(stream));
 
 		std::string header= getLine(stream);
 		std::vector<std::string> fields= tokenize(header, '|');	
@@ -45,6 +46,20 @@ public:
 		}	   
 		return table;    
 	}
+
+   Table *parseTableName( const std::string &line ) 
+   {
+      std::vector<std::string> tokens= tokenize(line, '|');
+      assert(!tokens.empty());
+
+      std::string tableName= tokens[0];
+
+      Table *table= new Table(tableName);
+
+      pushTableArgs(tokens, table);
+
+      return table;
+   }
 
 	/**
 	*  Loads a table from a file
@@ -64,9 +79,9 @@ public:
 	}
 
 
-   std::map<std::string, Table*> LoadTables(const std::string &contents)
+   std::multimap<std::string, Table*> LoadTables(const std::string &contents)
    {
-      std::map<std::string, Table*> tables;
+      std::multimap<std::string, Table*> tables;
       std::stringstream ss(contents);      
       std::string line, tableContents;
 
@@ -76,15 +91,17 @@ public:
             tableContents+= line;
             tableContents+= "\n";
 
-         } else {
+         } else if (!tableContents.empty()) {
             Table *loadedTable= LoadTable(tableContents);
-            tables[loadedTable->TableName()]= loadedTable;
+            //tables[loadedTable->TableName()]= loadedTable;
+            tables.insert(std::pair<std::string, Table*>(loadedTable->TableName(), loadedTable));
+            tableContents.clear();
          }
       }
       return tables;
    }
 
-   std::map<std::string, Table*> LoadTablesFromFile(const std::string &fileName)
+   std::multimap<std::string, Table*> LoadTablesFromFile(const std::string &fileName)
    {
       std::string buffer;
       std::ifstream arq(fileName.c_str());
@@ -150,6 +167,18 @@ private:
 		}
 		table.GetRows().push_back(row);
 	}
+
+   void pushTableArgs( const std::vector<std::string> &fields, Table * table ) 
+   {
+      if (fields.size() < 2) return;
+
+      for (size_t i= 1; i < fields.size(); i++)
+      {
+         table->PushTableArg(fields[i]);
+      }
+   }
+
+
 };
 
 #endif //INCLUDE_TABLEPARSERBASE_H
