@@ -3,6 +3,7 @@
 #define INCLUDED_TABLE_H
 
 #include "FixtureGlossary.h"
+#include <stdexcept>
 
 class Table
 {
