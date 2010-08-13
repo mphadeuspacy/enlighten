@@ -40,10 +40,38 @@ public:
    {
       if (rows.empty()) return 0;
       else return rows.begin()->size();
+   }   
+
+   std::string GetCell( const std::string &column, int row ) 
+   {
+      return rows[row][column];
    }
+
+   template <class T>
+   T GetCellAs(const std::string field, int row)
+   {
+      T value;
+      std::stringstream ss(rows[row][field].c_str());
+      ss >> value;
+      return value;
+   }
+
+   std::string GetTableArgAt(unsigned argIndex)
+   {
+      if (argIndex >= args.size())
+         throw std::runtime_error("cant find a table arg at " + argIndex);
+      return args[argIndex];
+   }
+
+   void PushTableArg( const std::string &arg ) 
+   {
+      args.push_back(arg);
+   }
+
 
 private:
    std::string tableName;
+   std::vector<std::string> args;
    Rows rows;
 };
 
